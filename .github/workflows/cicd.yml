@@ -1,0 +1,103 @@
+name: CI/CD
+on: 
+  push:
+    branches:
+      - 'master'
+      - 'staging'
+      - 'production'
+  pull_request:
+    branches:
+      - 'master'
+      - 'staging'
+      - 'production'
+jobs:
+  test:
+    name: Execute React Test
+    if: ${{ github.event_name == 'pull_request' && false }} # テストができるまで実行しないでおく
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ADMIN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Execute jest
+        run: |
+          yarn jest --coverage
+
+      - name: Jest coverage comment
+        if: always()
+        uses: MishaKav/jest-coverage-comment@main
+        with:
+          coverage-summary-path: ./coverage/coverage-summary.json
+          coverage-path: ./coverage/coverage.txt
+  deploy:
+    name: Build & Deploy
+    if: ${{ ! failure() }}
+    needs: Test 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Set env to dev
+        if: ${{ github.base_ref == 'master' || github.ref == 'refs/heads/master' }}
+        run: |
+          echo "APP_VARIANT=development" >> $GITHUB_ENV
+
+      - name: Set env to stg
+        if: ${{ github.base_ref == 'staging' || github.ref == 'refs/heads/staging' }}
+        run: |
+          echo "APP_VARIANT=staging" >> $GITHUB_ENV
+
+      - name: Set env to prd
+        if: ${{ github.base_ref == 'production' || github.ref == 'refs/heads/production' }}
+        run: |
+          echo "APP_VARIANT=production" >> $GITHUB_ENV
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: EAS Update for Dev
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: npx eas-cli update --non-interactive --auto
+
+      # ビルド/サブミットできる状態じゃないのでいったんコメントアウト
+      # - name: Build for Stg or Prd
+      #   if: ${{ github.base_ref == 'staging' || github.base_ref == 'production' }}
+      #   run: |
+      #     npx eas-cli build \
+      #       --platform all \
+      #       --non-interactive \
+      #       --no-wait \
+      #       --profile ${{ env.APP_VARIANT }}
+
+      # - name: Submit for Stg or Prd
+      #   if: ${{ github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production' }}
+      #   run: |
+      #     npx eas-cli submit \
+      #       --platform all \
+      #       --non-interactive \
+      #       --no-wait \
+      #       --profile ${{ env.APP_VARIANT }}
