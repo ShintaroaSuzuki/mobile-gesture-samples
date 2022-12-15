@@ -1,6 +1,18 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true
-  }
+    "extends": "expo/tsconfig.base",
+    "compilerOptions": {
+        "strict": true,
+        "jsx": "react-native",
+        "baseUrl": ".",
+        "paths": {
+            "@/screens/*": ["./src/screens/*"],
+            "@/components/*": ["./src/components/*"],
+            "@/hooks/*": ["./src/hooks/*"],
+            "@/utils": ["./src/utils"],
+            "@/types": ["./src/types"],
+            "@/styles": ["./src/styles"],
+            "@/__mocks__/*": ["./__mocks__/*"]
+        }
+    },
+    "include": ["src"]
 }
