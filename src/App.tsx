@@ -1,21 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import PanGesture from "@/components/PanGesture";
+import { NavigationContainer } from "@react-navigation/native";
+import TabNavigator from "@/navigations/TabNavigator";
 
 export default function App() {
     return (
-        <View style={styles.container}>
+        <NavigationContainer>
             <StatusBar style="auto" />
-            <PanGesture height={200} width={80} />
-        </View>
+            <TabNavigator />
+        </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});

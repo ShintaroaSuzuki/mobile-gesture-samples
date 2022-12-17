@@ -1,12 +1,14 @@
-import Props from './TabNavigator.types';
-import { StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import PanGestureScreen from "@/screens/PanGestureScreen";
 
-const TabNavigator = ({}: Props) => {
+const Tab = createBottomTabNavigator();
+
+const TabNavigator = () => {
     return (
-        <></>
-    )
+        <Tab.Navigator>
+            <Tab.Screen name="PanGesture" component={PanGestureScreen} />
+        </Tab.Navigator>
+    );
 };
-
-const styles = StyleSheet.create({});
 
 export default TabNavigator;

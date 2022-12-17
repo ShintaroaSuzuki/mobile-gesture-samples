@@ -1,12 +1,21 @@
-import Props from './PanGestureScreen.types';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, SafeAreaView } from "react-native";
+import PanGesture from "@/components/PanGesture";
 
-const PanGestureScreen = ({}: Props) => {
+const PanGestureScreen = () => {
     return (
-        <></>
-    )
+        <SafeAreaView style={styles.container}>
+            <PanGesture height={200} width={80} />
+        </SafeAreaView>
+    );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+});
 
 export default PanGestureScreen;
