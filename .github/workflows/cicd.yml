@@ -22,14 +22,8 @@ jobs:
           submodules: recursive
           token: ${{ secrets.ADMIN_PERSONAL_ACCESS_TOKEN }}
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile
+      - name: Setup Environment
+        uses: ./.github/actions/setup-env
 
       - name: Execute jest
         run: |
@@ -41,6 +35,7 @@ jobs:
         with:
           coverage-summary-path: ./coverage/coverage-summary.json
           coverage-path: ./coverage/coverage.txt
+
   deploy:
     name: Build & Deploy
     if: ${{ ! failure() }}
@@ -50,13 +45,8 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile
+      - name: Setup Environment
+        uses: ./.github/actions/setup-env
 
       - name: Set env to dev
         if: ${{ github.base_ref == 'master' || github.ref == 'refs/heads/master' }}
