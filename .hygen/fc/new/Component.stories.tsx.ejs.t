@@ -1,5 +1,5 @@
 ---
-to: <%= abs_path %>/<%= component_name %>.stories.tsx
+to: "<%= component_type !== 'navigations' ? `${abs_path}/${component_name}.stories.tsx` : null %>"
 ---
 
 import <%= component_name %> from './<%= component_name %>';

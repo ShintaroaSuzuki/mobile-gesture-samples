@@ -19,7 +19,7 @@ module.exports = {
                 component_name =
                     component_name[0].toLowerCase() + component_name.slice(1);
             }
-            const abs_path = `src/${component_type}/${component_name}/`;
+            const abs_path = `src/${component_type}/${component_name}`;
             return { ...answers, abs_path };
         });
     },
