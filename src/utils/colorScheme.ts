@@ -5,4 +5,5 @@ export enum colorScheme {
     emerald = "#5ccad0",
     white = "#f4f4f4",
     lightGray = "#d4d8e3",
+    beige = "#d2c7bc",
 }
