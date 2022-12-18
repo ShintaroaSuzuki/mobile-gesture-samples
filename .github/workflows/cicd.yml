@@ -12,7 +12,7 @@ on:
       - 'production'
 jobs:
   test:
-    name: Execute React Test
+    name: Execute Test
     if: ${{ github.event_name == 'pull_request' && false }} # テストができるまで実行しないでおく
     runs-on: ubuntu-latest
     steps:
@@ -35,6 +35,16 @@ jobs:
         with:
           coverage-summary-path: ./coverage/coverage-summary.json
           coverage-path: ./coverage/coverage.txt
+
+      - name: Notify to Slack
+        if: always()
+        uses: ./.github/actions/notify-slack
+        with:
+          job_name: Execure Test
+          status: ${{ job.status }}
+          title: Test 結果
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy:
     name: Build & Deploy
@@ -91,3 +101,13 @@ jobs:
       #       --non-interactive \
       #       --no-wait \
       #       --profile ${{ env.APP_VARIANT }}
+
+      - name: Notify to Slack
+        if: always()
+        uses: ./.github/actions/notify-slack
+        with:
+          job_name: Build & Deploy
+          status: ${{ job.status }}
+          title: Build & Deploy 結果
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
