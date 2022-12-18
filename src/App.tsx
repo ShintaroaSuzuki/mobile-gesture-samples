@@ -5,7 +5,7 @@ import TabNavigator from "@/navigations/TabNavigator";
 export default function App() {
     return (
         <NavigationContainer>
-            <StatusBar style="auto" />
+            <StatusBar style="light" />
             <TabNavigator />
         </NavigationContainer>
     );
