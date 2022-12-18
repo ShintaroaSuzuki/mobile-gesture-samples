@@ -100,11 +100,11 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
                             style={styles.inner}
                         >
                             <AnimatedIcon
-                                name={
+                                name={`${
                                     TabBarIcon[
                                         route.name as keyof typeof TabBarIcon
-                                    ]
-                                }
+                                    ] + (isFocused ? "" : "-outline")
+                                }`}
                                 size={28}
                                 color={
                                     isFocused
