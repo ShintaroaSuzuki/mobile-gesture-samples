@@ -11,7 +11,6 @@ const HomeDrawerNavigator = () => {
             initialRouteName="PanGesture"
             screenOptions={{
                 drawerStyle: { backgroundColor: colorScheme.lightGray },
-                drawerType: "front",
                 drawerActiveTintColor: colorScheme.turquoise,
             }}
         >
