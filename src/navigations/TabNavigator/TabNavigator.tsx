@@ -76,6 +76,26 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
                     }
                 };
 
+                const onPressIn = () => {
+                    Animated.timing(animatedValue, {
+                        toValue: 100,
+                        duration: 75,
+                        useNativeDriver: false,
+                    }).start();
+                };
+
+                const onPressOut = () => {
+                    Animated.timing(animatedValue, {
+                        toValue: 0,
+                        duration: 75,
+                        useNativeDriver: false,
+                    }).start();
+
+                    if (!isFocused) {
+                        navigation.navigate(route.name);
+                    }
+                };
+
                 const onLongPress = () => {
                     navigation.emit({
                         type: "tabLongPress",
@@ -97,6 +117,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             onLongPress={onLongPress}
+                            onPressIn={onPressIn}
+                            onPressOut={onPressOut}
                             style={styles.inner}
                         >
                             <AnimatedIcon
