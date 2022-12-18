@@ -3,7 +3,6 @@ import {
     createBottomTabNavigator,
     BottomTabBarProps,
 } from "@react-navigation/bottom-tabs";
-import PanGestureScreen from "@/screens/PanGestureScreen";
 import {
     SafeAreaView,
     View,
@@ -14,6 +13,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { colorScheme } from "@/utils";
+import HomeDrawerNavigator from "@/navigations/HomeDrawerNavigator";
 
 enum TabBarIcon {
     Home = "home",
@@ -178,7 +178,7 @@ const TabNavigator = () => {
         <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
             <Tab.Screen
                 name="Home"
-                component={PanGestureScreen}
+                component={HomeDrawerNavigator}
                 options={{ headerShown: false }}
             />
             <Tab.Screen

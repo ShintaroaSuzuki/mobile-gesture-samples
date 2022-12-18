@@ -8,12 +8,18 @@ import { StyleSheet } from 'react-native';
 <% } -%>
 <% if (component_type === 'screens') { -%>
 import { StyleSheet, SafeAreaView } from 'react-native';
+import { colorScheme } from '@/utils';
 <% } -%>
 
 const <%= component_name %> = (<%= component_type === 'components' ? "{}: Props" : null %>) => {
     return (
         <% if (component_type === 'screens') { -%>
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView
+            style={[
+                styles.container,
+                { backgroundColor: colorScheme.darkGray },
+            ]}
+        >
             <></>
         </SafeAreaView>
         <% } else {-%>
@@ -22,8 +28,17 @@ const <%= component_name %> = (<%= component_type === 'components' ? "{}: Props"
     )
 };
 
-<% if (component_type !== 'navigations') { -%>
+<% if (component_type === 'components') { -%>
 const styles = StyleSheet.create({});
+<% } -%>
+<% if (component_type === 'screens') { -%>
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
 <% } -%>
 
 export default <%= component_name %>;
