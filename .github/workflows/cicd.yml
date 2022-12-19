@@ -14,41 +14,38 @@ on:
 jobs:
   test:
     name: Execute Test
-    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'ready_for_review' || github.event.pull_request.draft == false) }}
+    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'ready_for_review' || github.event.pull_request.draft == false) && false }} # テストができるまで実行しないでおくしないでおく
     runs-on: ubuntu-latest
     steps:
-      - name: check test is called
-        run: echo 'test!'
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.ADMIN_PERSONAL_ACCESS_TOKEN }}
 
-      # - name: Checkout branch
-      #   uses: actions/checkout@v3
-      #   with:
-      #     submodules: recursive
-      #     token: ${{ secrets.ADMIN_PERSONAL_ACCESS_TOKEN }}
+      - name: Setup Environment
+        uses: ./.github/actions/setup-env
 
-      # - name: Setup Environment
-      #   uses: ./.github/actions/setup-env
+      - name: Execute jest
+        run: |
+          yarn jest --coverage
 
-      # - name: Execute jest
-      #   run: |
-      #     yarn jest --coverage
+      - name: Jest coverage comment
+        if: always()
+        uses: MishaKav/jest-coverage-comment@main
+        with:
+          coverage-summary-path: ./coverage/coverage-summary.json
+          coverage-path: ./coverage/coverage.txt
 
-      # - name: Jest coverage comment
-      #   if: always()
-      #   uses: MishaKav/jest-coverage-comment@main
-      #   with:
-      #     coverage-summary-path: ./coverage/coverage-summary.json
-      #     coverage-path: ./coverage/coverage.txt
-
-      # - name: Notify to Slack
-      #   if: always()
-      #   uses: ./.github/actions/notify-slack
-      #   with:
-      #     job_name: Execure Test
-      #     status: ${{ job.status }}
-      #     title: Test 結果
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Notify to Slack
+        if: always()
+        uses: ./.github/actions/notify-slack
+        with:
+          job_name: Execure Test
+          status: ${{ job.status }}
+          title: Test 結果
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy:
     name: Build & Deploy
