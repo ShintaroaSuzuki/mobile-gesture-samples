@@ -6,7 +6,7 @@ on:
       - 'staging'
       - 'production'
   pull_request:
-    types: [ready_for_review, synchronize]
+    types: [ready_for_review, opened, synchronize]
     branches:
       - 'master'
       - 'staging'
