@@ -6,6 +6,7 @@ on:
       - 'staging'
       - 'production'
   pull_request:
+    types: [ready_for_review, synchronize]
     branches:
       - 'master'
       - 'staging'
@@ -13,7 +14,7 @@ on:
 jobs:
   test:
     name: Execute Test
-    if: ${{ github.event_name == 'pull_request' && false }} # テストができるまで実行しないでおく
+    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'ready_for_review' || github.event.pull_request.draft == false) && false }} # テストができるまで実行しないでおくしないでおく
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
